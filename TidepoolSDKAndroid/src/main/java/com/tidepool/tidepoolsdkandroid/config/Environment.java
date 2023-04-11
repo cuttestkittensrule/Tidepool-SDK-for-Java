@@ -1,4 +1,4 @@
-package tidepoolsdkandroid.config;
+package com.tidepool.tidepoolsdkandroid.config;
 
 /**
  * The enviroment that you are in

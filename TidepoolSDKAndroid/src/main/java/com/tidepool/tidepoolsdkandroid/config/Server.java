@@ -1,4 +1,4 @@
-package tidepoolsdkandroid.config;
+package com.tidepool.tidepoolsdkandroid.config;
 
 /**
  * The link to various backend servers

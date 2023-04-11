@@ -16,6 +16,8 @@ repositories {
     mavenCentral()
 }
 
+version = "alpha-0.0.1"
+
 dependencies {
     // Use JUnit test framework.
     testImplementation 'junit:junit:4.13.2'
@@ -27,4 +29,11 @@ dependencies {
     implementation 'com.google.guava:guava:31.1-jre'
 
 	implementation 'org.json:json:20230227'
+}
+
+tasks.named('jar') {
+    manifest {
+        attributes('Implementation-Title': project.name,
+                   'Implementation-Version': project.version)
+    }
 }

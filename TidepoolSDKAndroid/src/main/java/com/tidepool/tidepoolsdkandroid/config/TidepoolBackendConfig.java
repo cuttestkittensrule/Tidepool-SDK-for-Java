@@ -1,4 +1,4 @@
-package tidepoolsdkandroid.config;
+package com.tidepool.tidepoolsdkandroid.config;
 
 import org.json.JSONException;
 import org.json.JSONObject;

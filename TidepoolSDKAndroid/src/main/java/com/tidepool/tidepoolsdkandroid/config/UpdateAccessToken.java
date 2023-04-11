@@ -1,4 +1,4 @@
-package tidepoolsdkandroid.config;
+package com.tidepool.tidepoolsdkandroid.config;
 
 import java.io.BufferedReader;
 import java.io.IOException;
