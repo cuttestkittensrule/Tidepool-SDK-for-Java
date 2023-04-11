@@ -12,7 +12,10 @@ import javax.net.ssl.HttpsURLConnection;
 
 import org.json.JSONObject;
 
-public class UpdateAcessToken implements Runnable {
+/**
+ * Updates the access token
+ */
+public class UpdateAccessToken implements Runnable {
 	/** the output JSON */
 	private JSONObject json;
 	/** A {@link CountDownLatch} for waiting until the operation is complete */
@@ -26,16 +29,18 @@ public class UpdateAcessToken implements Runnable {
 	 * 
 	 * @param latch the {@link CountDownLatch} to have counted down when the
 	 *              runnable finishes
+	 * @param cnf The {@link TidepoolBackendConfig configuration} to use for the request
 	 */
-	public UpdateAcessToken(CountDownLatch latch, TidepoolBackendConfig cnf) {
+	public UpdateAccessToken(CountDownLatch latch, TidepoolBackendConfig cnf) {
 		this.latch = Optional.ofNullable(latch);
 		this.cnf = cnf;
 	}
 
 	/**
 	 * Creates a runnable to update the acess token without a {@link CountDownLatch}
+	 * @param cnf The {@link TidepoolBackendConfig configuration} to use for the request
 	 */
-	public UpdateAcessToken(TidepoolBackendConfig cnf) {
+	public UpdateAccessToken(TidepoolBackendConfig cnf) {
 		this(null, cnf);
 	}
 
@@ -52,16 +57,19 @@ public class UpdateAcessToken implements Runnable {
 			return;
 		}
 		try {
+			// TODO: Add parameter for the refresh token
 			// the params for the POST
 			String params = String.format("grant_type=refresh_token&client_id=%s", cnf.getClientID());
 			// The url to POST to
 			String full_URL = String.format("%s/realms/%s/protocol/openid-connect/token", cnf.getServerAddress(),
-					cnf.getEnviromentRealm());
+					cnf.getEnvironmentRealm());
 			// creating a URL object with full_URL
 			URL url = new URL(full_URL);
 
 			// opening the connection
 			HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+			urlConnection.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			urlConnection.addRequestProperty("X-Tidepool-Session-Token", cnf.getRefreshToken());
 			urlConnection.setDoOutput(true);
 
 			// writing to the connection's stream (and closing it)

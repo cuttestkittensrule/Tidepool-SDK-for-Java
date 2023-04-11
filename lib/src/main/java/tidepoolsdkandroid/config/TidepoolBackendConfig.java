@@ -3,22 +3,26 @@ package tidepoolsdkandroid.config;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Represents a configuration for interfacing with the tidepool backend
+ */
 public class TidepoolBackendConfig {
 	private final Server server;
 	private final String client_id;
 	private final Environment env;
 
-	private String currentAcessToken;
+	private String currentAccessToken;
 	private String currentRefreshToken;
 	private int expiresIn;
 	private int refreshExpiresIn;
 	private long recievedToken;
 
 	/**
-	 * Creates a configuration to acess the tidepool backend 
-	 * @param env
-	 * @param client_id
-	 * @param defaultServer
+	 * Creates a configuration to access the tidepool backend.
+	 * <strong>May not work properly if you put your own {@link Server}</strong>
+	 * @param env The {@link Environment} that you are interfacing with
+	 * @param client_id The starting {@code client_id}
+	 * @param defaultServer The {@link Server} that you are interfacing with
 	 */
 	public TidepoolBackendConfig(Environment env, String client_id, Server defaultServer) {
 		this.env = env;
@@ -26,15 +30,28 @@ public class TidepoolBackendConfig {
 		this.client_id = client_id;
 	}
 
+	/**
+	 * Creates a configuration to access the tidepool backend.
+	 * @param env The {@link Environment} that you are interfacing with
+	 * @param client_id The starting {@code client_id}
+	 */
 	public TidepoolBackendConfig(Environment env, String client_id) {
 		this(env, client_id, env.getDefaultServer());
 	}
 
-	public String getAcessToken() {
-		return currentAcessToken;
+	/**
+	 * Gets the current {@link #currentAccessToken access token}
+	 * @return the current  {@link #currentAccessToken access token}
+	 */
+	public String getAccessToken() {
+		return currentAccessToken;
 	}
 
-	public String getRefreshToken() {
+	/**
+	 * Gets the current {@link #currentRefreshToken refresh token}
+	 * @return the current {@link #currentRefreshToken refresh token}
+	 */
+	String getRefreshToken() {
 		return currentRefreshToken;
 	}
 
@@ -58,7 +75,7 @@ public class TidepoolBackendConfig {
 	 * Gets the set {@link #env enviroment}
 	 * @return {@link #env enviroment}
 	 */
-	public Environment getEnviroment() {
+	public Environment getEnvironment() {
 		return env;
 	}
 
@@ -66,7 +83,7 @@ public class TidepoolBackendConfig {
 	 * Returns the realm string for the set enviroment
 	 * @return The Realm for the enviroment (ex. qa1)
 	 */
-	public String getEnviromentRealm() {
+	public String getEnvironmentRealm() {
 		return env.getRealm();
 	}
 
@@ -89,15 +106,18 @@ public class TidepoolBackendConfig {
 	/**
 	 * Checks if the current refresh token should be valid
 	 * @return {@code true} if the current refresh token should be invalid
-	 * @return
 	 */
 	public boolean refreshTokenExpired() {
 		return System.currentTimeMillis() - recievedToken >= refreshExpiresIn * 1_000;
 	}
 
+	/**
+	 * Updates the values related to the current {@link #currentAccessToken access token}
+	 * @param json the reply to the https POST request
+	 */
 	void UpdateAcessToken(JSONObject json) {
 		try {
-			currentAcessToken = json.getString("acess_token");
+			currentAccessToken = json.getString("acess_token");
 			expiresIn = json.getInt("expires_in");
 			currentRefreshToken = json.getString("refresh_token");
 			refreshExpiresIn = Integer.parseInt(json.getString("refresh_expires_in"));
@@ -111,6 +131,6 @@ public class TidepoolBackendConfig {
 	 * Updates the acess token using the refresh token
 	 */
 	public void UpdateAcessToken() {
-		new UpdateAcessToken(this).run();
+		new UpdateAccessToken(this).run();
 	}
 }

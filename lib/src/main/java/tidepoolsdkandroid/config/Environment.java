@@ -13,7 +13,7 @@ public enum Environment {
 	/** integration */
 	int_("integration", Server.ext),
 	/** default enviroment (tidepool) */
-	def("tidepool", Server.prod);
+	prod("tidepool", Server.prod);
 	private final String realm;
 	private final Server defaultServer;
 	private Environment(String realm, Server defaultServer) {
@@ -21,12 +21,18 @@ public enum Environment {
 		this.defaultServer = defaultServer;
 	}
 
-	/** get the string code for the realm */
+	/**
+	 * Gets the realm for the Environment
+	 * @return the realm for the environment
+	 */
 	public String getRealm() {
 		return realm;
 	}
 
-	/** gets the default server for this enviroment */
+	/**
+	 * Gets the default {@link Server} for this environment
+	 * @return The default {@link Server} for this environment
+	 */
 	public Server getDefaultServer() {
 		return defaultServer;
 	}
