@@ -1,4 +1,4 @@
-package com.tidepool.tidepoolsdkandroid.config;
+package com.tidepool.tidepoolsdkjava.config;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -57,9 +57,8 @@ public class UpdateAccessToken implements Runnable {
 			return;
 		}
 		try {
-			// TODO: Add parameter for the refresh token
 			// the params for the POST
-			String params = String.format("grant_type=refresh_token&client_id=%s", cnf.getClientID());
+			String params = String.format("grant_type=refresh_token&client_id=%s&refresh_token=%s", cnf.getClientID(), cnf.getRefreshToken());
 			// The url to POST to
 			String full_URL = String.format("%s/realms/%s/protocol/openid-connect/token", cnf.getServerAddress(),
 					cnf.getEnvironmentRealm());
@@ -68,8 +67,8 @@ public class UpdateAccessToken implements Runnable {
 
 			// opening the connection
 			HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+			urlConnection.setRequestMethod("POST");
 			urlConnection.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-			urlConnection.addRequestProperty("X-Tidepool-Session-Token", cnf.getRefreshToken());
 			urlConnection.setDoOutput(true);
 
 			// writing to the connection's stream (and closing it)

@@ -1,4 +1,4 @@
-package com.tidepool.tidepoolsdkandroid.config;
+package com.tidepool.tidepoolsdkjava.config;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,7 +7,7 @@ import org.json.JSONObject;
  * Represents a configuration for interfacing with the tidepool backend
  */
 public class TidepoolBackendConfig {
-	private final Server server;
+	private final String serverAddress;
 	private final String client_id;
 	private final Environment env;
 
@@ -19,14 +19,14 @@ public class TidepoolBackendConfig {
 
 	/**
 	 * Creates a configuration to access the tidepool backend.
-	 * <strong>May not work properly if you put your own {@link Server}</strong>
+	 * <strong>May not work properly if you put your own server address</strong>
 	 * @param env The {@link Environment} that you are interfacing with
 	 * @param client_id The starting {@code client_id}
-	 * @param defaultServer The {@link Server} that you are interfacing with
+	 * @param serverAddress The address of the server that you are interfacing with
 	 */
-	public TidepoolBackendConfig(Environment env, String client_id, Server defaultServer) {
+	public TidepoolBackendConfig(Environment env, String client_id, String serverAddress) {
 		this.env = env;
-		this.server = defaultServer;
+		this.serverAddress = serverAddress;
 		this.client_id = client_id;
 	}
 
@@ -36,7 +36,7 @@ public class TidepoolBackendConfig {
 	 * @param client_id The starting {@code client_id}
 	 */
 	public TidepoolBackendConfig(Environment env, String client_id) {
-		this(env, client_id, env.getDefaultServer());
+		this(env, client_id, env.getServerAddress());
 	}
 
 	/**
@@ -60,15 +60,7 @@ public class TidepoolBackendConfig {
 	 * @return the set server address
 	 */
 	public String getServerAddress() {
-		return server.getAddress();
-	}
-
-	/**
-	 * Gets the set {@link #server}
-	 * @return the set server {@link #server}
-	 */
-	public Server getServer() {
-		return server;
+		return serverAddress;
 	}
 
 	/**

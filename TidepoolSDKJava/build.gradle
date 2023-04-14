@@ -16,7 +16,7 @@ repositories {
     mavenCentral()
 }
 
-version = "alpha-0.0.1"
+version = "alpha-0.1.0"
 
 dependencies {
     // Use JUnit test framework.
@@ -36,4 +36,13 @@ tasks.named('jar') {
         attributes('Implementation-Title': project.name,
                    'Implementation-Version': project.version)
     }
+}
+
+java {
+	withJavadocJar()
+	withSourcesJar()
+}
+
+tasks.withType(JavaCompile) {
+	options.release = 11
 }
