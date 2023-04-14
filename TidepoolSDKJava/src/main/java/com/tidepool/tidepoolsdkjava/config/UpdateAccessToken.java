@@ -1,144 +1,243 @@
 package com.tidepool.tidepoolsdkjava.config;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.URL;
-import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
-
-import javax.net.ssl.HttpsURLConnection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONObject;
 
+import com.tidepool.tidepoolsdkjava.UrlEncodedRequest;
+
 /**
- * Updates the access token
+ * Gets new access tokens
+ * 
+ * @since alpha-0.2.0
  */
-public class UpdateAccessToken implements Runnable {
-	/** the output JSON */
-	private JSONObject json;
-	/** A {@link CountDownLatch} for waiting until the operation is complete */
-	private final Optional<CountDownLatch> latch;
-	private Optional<Boolean> succsess = Optional.empty();
-	/** The {@link TidepoolBackendConfig} */
-	private TidepoolBackendConfig cnf;
-
+public final class UpdateAccessToken extends UrlEncodedRequest {
 	/**
-	 * Creates a runnable to update the acess token
+	 * Used to create an UpdateAccessToken request
 	 * 
-	 * @param latch the {@link CountDownLatch} to have counted down when the
-	 *              runnable finishes
-	 * @param cnf The {@link TidepoolBackendConfig configuration} to use for the request
+	 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token">Spotlight docs</a>
+	 * @since alpha-0.2.0
 	 */
-	public UpdateAccessToken(CountDownLatch latch, TidepoolBackendConfig cnf) {
-		this.latch = Optional.ofNullable(latch);
-		this.cnf = cnf;
+	public static class Builder {
+		/**
+		 * The backend configuration
+		 * 
+		 * @since alpha-0.2.0
+		 */
+		private final TidepoolBackendConfig cnf;
+		/**
+		 * The parameters for the body
+		 * 
+		 * @since alpha-0.2.0
+		 */
+		private Map<String, String> bodyParams;
+
+		/**
+		 * Creates a Builder for {@link UpdateAccessToken}
+		 * @param grantType The grant type
+		 * @param cnf The backend configuration
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token">Spotlight docs</a>
+		 * @since alpha-0.2.0
+		 */
+		public Builder(String grantType, TidepoolBackendConfig cnf) {
+			this.cnf = cnf;
+			if (grantType != "refresh_token" && grantType != "authorization_code"
+					&& grantType != "urn:ietf:params:oauth:grant-type:token-exchange") {
+				throw new IllegalArgumentException(
+						"Expected \"refresh_token\" or \"authorization_code\" or \"urn:ietf:params:oauth:grant-type:token-exchange\", but was: \""
+								+ grantType + "\"");
+			}
+			bodyParams.put("grant_type", "grant_type");
+			bodyParams.put("client_id", cnf.getClientID());
+
+		}
+
+		/**
+		 * Sets The code
+		 * @param code The code
+		 * @return {@code this} for chaining
+		 * @since alpha-0.2.0
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+		 */
+		public Builder setCode(String code) {
+			bodyParams.put("code", code);
+			return this;
+		}
+
+		/**
+		 * Sets the code verifier
+		 * @param codeverifier The code verifier
+		 * @return {@code this} for chaining
+		 * @since alpha-0.2.0
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+		 */
+		public Builder setCodeVerifier(String codeverifier) {
+			bodyParams.put("code_verifier", codeverifier);
+			return this;
+		}
+
+		/**
+		 * Sets the client secret
+		 * @param secret The client secret
+		 * @return {@code this} for chaining
+		 * @since alpha-0.2.0
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+		 */
+		public Builder setClientSecret(String secret) {
+			bodyParams.put("client_secret", secret);
+			return this;
+		}
+
+		/**
+		 * Sets the subject token
+		 * @param subjectToken The subject token
+		 * @return {@code this} for chaining
+		 * @since alpha-0.2.0
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+		 */
+		public Builder setSubjectToken(String subjectToken) {
+			bodyParams.put("subject_token", subjectToken);
+			return this;
+		}
+
+		/**
+		 * Sets the subject token type
+		 * @param subjectTokenType the subject token type
+		 * @return {@code this} for chaining
+		 * @since alpha-0.2.0
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+		 */
+		public Builder setSubjectTokenType(String subjectTokenType) {
+			if (subjectTokenType != "urn:ietf:params:oauth:token-type:access_token"
+					&& subjectTokenType != "urn:ietf:params:oauth:token-type:jwt") {
+				throw new IllegalArgumentException(
+						"Expected \"urn:ietf:params:oauth:token-type:access_token\" or \"urn:ietf:params:oauth:token-type:access_token\", but was: \""
+								+ subjectTokenType + "\"");
+			}
+			bodyParams.put("subject_token_type", subjectTokenType);
+			return this;
+		}
+
+		/**
+		 * Sets the requested token type
+		 * @param requestedTokenType The requested token type
+		 * @return {@code this} for chaining
+		 * @since alpha-0.2.0
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+		 */
+		public Builder setRequestedTokenType(String requestedTokenType) {
+			if (requestedTokenType != "urn:ietf:params:oauth:token-type:access_token"
+					&& requestedTokenType != "urn:ietf:params:oauth:token-type:refresh_token") {
+				throw new IllegalArgumentException(
+						"Expected \"urn:ietf:params:oauth:token-type:access_token\" or \"urn:ietf:params:oauth:token-type:refresh_token\", but was: \""
+								+ requestedTokenType + "\"");
+			}
+			bodyParams.put("requested_token_type", requestedTokenType);
+			return this;
+		}
+
+		/**
+		 * Sets the subject Issuer
+		 * @param subjectIssuer The subject issuer
+		 * @return {@code this} for chaining
+		 * @since alpha-0.2.0
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+		 */
+		public Builder setSubjectIssuer(String subjectIssuer) {
+			bodyParams.put("subject_issuer", subjectIssuer);
+			return this;
+		}
+
+		/**
+		 * Puts the current refresh token into the parameters
+		 * @return {@code this} for chaining
+		 * @since alpha-0.2.0
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+		 */
+		public Builder putRefreshToken() {
+			bodyParams.put("refresh_token", cnf.getRefreshToken());
+			return this;
+		}
+
+		/**
+		 * Builds this into an {@link UpdateAccessToken} request
+		 * @return an {@link UpdateAccessToken} request
+		 * @since alpha-0.2.0
+		 */
+		public UpdateAccessToken build() {
+			return new UpdateAccessToken(this);
+		}
 	}
 
 	/**
-	 * Creates a runnable to update the acess token without a {@link CountDownLatch}
-	 * @param cnf The {@link TidepoolBackendConfig configuration} to use for the request
+	 * Creates an {@link UpdateAccessToken} request
+	 * @param builder the builder to create this with
+	 * @since alpha-0.2.0
 	 */
-	public UpdateAccessToken(TidepoolBackendConfig cnf) {
-		this(null, cnf);
+	private UpdateAccessToken(Builder builder) {
+		super(new HashMap<>(), builder.cnf, new HashMap<>(), builder.bodyParams);
 	}
 
 	/**
-	 * Sends a HTTPS POST request to the selected Tidepool server, and gives the
-	 * results to the given {@link TidepoolBackendConfig}.
-	 * If given a {@link CountDownLatch}, the latch will count down when this
-	 * finishes.
+	 * @since alpha-0.2.0
 	 */
 	@Override
-	public void run() {
-		if (cnf.refreshTokenExpired()) {
-			System.err.println("The refresh token expired");
-			return;
-		}
-		try {
-			// the params for the POST
-			String params = String.format("grant_type=refresh_token&client_id=%s&refresh_token=%s", cnf.getClientID(), cnf.getRefreshToken());
-			// The url to POST to
-			String full_URL = String.format("%s/realms/%s/protocol/openid-connect/token", cnf.getServerAddress(),
-					cnf.getEnvironmentRealm());
-			// creating a URL object with full_URL
-			URL url = new URL(full_URL);
-
-			// opening the connection
-			HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
-			urlConnection.setRequestMethod("POST");
-			urlConnection.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-			urlConnection.setDoOutput(true);
-
-			// writing to the connection's stream (and closing it)
-			try (OutputStream stream = urlConnection.getOutputStream()) {
-				stream.write(params.getBytes());
-
-				stream.flush();
-			}
-
-			// Handling responses
-
-			int responseCode = urlConnection.getResponseCode();
-
-			// if the response was ok (200)
-			if (responseCode == HttpsURLConnection.HTTP_OK) {
-				// reading slowly instead of all at once just in case
-				try (BufferedReader stream = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
-					String inputLine;
-					StringBuffer response = new StringBuffer();
-
-					while ((inputLine = stream.readLine()) != null) {
-						response.append(inputLine);
-					}
-					json = new JSONObject(response.toString());
-					succsess = Optional.of(true);
-					cnf.UpdateAcessToken(json);
-				}
-			} else if (responseCode == HttpsURLConnection.HTTP_BAD_REQUEST) {
-				// reading slowly instead of all at once just in case
-				try (BufferedReader stream = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
-					String inputLine;
-					StringBuffer response = new StringBuffer();
-
-					while ((inputLine = stream.readLine()) != null) {
-						response.append(inputLine);
-					}
-					json = new JSONObject(response.toString());
-					succsess = Optional.of(false);
-					System.out.printf("The error code \"%s\" came up with a message of \"%s\"\n", json.getString("error"));
-				}
-			}
-
-			cnf.UpdateAcessToken(json);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		latch.ifPresent((CountDownLatch latch) -> latch.countDown());
+	protected String getURI() {
+		return String.format("/realms/%s/protocol/openid-connect/token", cnf.getEnvironmentRealm());
 	}
 
 	/**
-	 * Sleeps the thread until this finishes running
+	 * @since alpha-0.2.0
 	 */
-	public void awaitLatch() {
-		try {
-			if (latch.isPresent()) {
-				latch.get().await();
-			} else {
-				throw new IllegalStateException("Cannot wait for the CountDownLatch since there is no CountDownLatch");
-			}
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+	@Override
+	protected RequestType getRequestType() {
+		return RequestType.POST;
 	}
 
 	/**
-	 * A return value of an optional containing a value, it means that the json was set, and the value describes if it was a success.
-	 * If the return value is an empy optional, than either execution hasnt't reached the point where the json is created
-	 * @return if the response was a success, failure, or hasn't happened yet
+	 * @since alpha-0.2.0
 	 */
-	public Optional<Boolean> getSuccess() {
-		return succsess;
+	@Override
+	protected boolean requiresSessionToken() {
+		return false;
 	}
+
+	/**
+	 * @since alpha-0.2.0
+	 */
+	@Override
+	protected void parseResponse(String response) {
+		jsonObject = new JSONObject(response);
+	}
+
+	/**
+	 * @since alpha-0.2.0
+	 */
+	@Override
+	protected Map<Environment, String> getEnvMap() {
+		Map<Environment, String> result = new HashMap<>();
+		result.put(Environment.dev, "https://auth.dev.tidepool.org");
+		result.put(Environment.int_, "https://auth.external.tidepool.org");
+		result.put(Environment.prod, "https://auth.tidepool.org");
+		result.put(Environment.qa1, "https://auth.qa2.tidepool.org");
+		result.put(Environment.qa2, "https://auth.qa2.tidepool.org");
+		return Collections.unmodifiableMap(result);
+	}
+
+	/**
+	 * @since alpha-0.2.0
+	 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+	 */
+	@Override
+	public JSONObject getJsonObject() {
+		return super.getJsonObject();
+	}
+
+	@Override
+	protected boolean startingCondition() {
+		return !cnf.refreshTokenExpired();
+	}
+
 }

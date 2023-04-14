@@ -3,6 +3,7 @@ package com.tidepool.tidepoolsdkjava;
 import java.util.Map;
 
 /**
+ * @deprecated Not necessarily needed, for removal. Use {@link String#format(String, Object...)} instead
  * Creates a path with placeholders for variables.<br>
  * Below is an example of how to use this class.
  * 
@@ -13,7 +14,9 @@ import java.util.Map;
  * 	pathArgs.put("userId", "user-id-here");
  * 	String completedPath = path.apply(pathArgs);
  * </pre>
+ * @since alpha-0.1.0
  */
+@Deprecated(since = "alpha-0.1.0", forRemoval = true)
 public class Path {
 	private String path;
 

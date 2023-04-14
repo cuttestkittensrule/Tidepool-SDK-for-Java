@@ -1,5 +1,10 @@
 package com.tidepool.tidepoolsdkjava;
-
+/**
+ * @deprecated until further notice (not being used).
+ * If it isn't being used, might as well deprecate it.
+ * @since alpha-0.1.0
+ */
+@Deprecated(since = "alpha-0.1.0", forRemoval = true)
 public class Constants {
 	/**
 	 * A Regulaar Expression that matches an ISO-8601 formatted time and date string
