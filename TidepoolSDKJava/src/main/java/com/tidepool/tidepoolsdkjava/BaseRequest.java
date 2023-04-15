@@ -335,7 +335,7 @@ abstract public class BaseRequest implements Runnable {
 	 * 
 	 * @param responseCode the HTTP response code
 	 * @param in           the {@link InputStream} that the
-	 *                     {@link HttpsUrlConnection} returned
+	 *                     {@link HttpsURLConnection} returned
 	 * @since alpha-0.2.0
 	 */
 	protected void handleSuccsess(int responseCode, InputStream in) {
@@ -358,7 +358,7 @@ abstract public class BaseRequest implements Runnable {
 	 * 
 	 * @param responseCode the HTTP response code
 	 * @param in           the {@link InputStream} that the
-	 *                     {@link HttpsUrlConnection} returned
+	 *                     {@link HttpsURLConnection} returned
 	 * @since alpha-0.2.0
 	 */
 	protected void handleFailure(int responseCode, InputStream in) {

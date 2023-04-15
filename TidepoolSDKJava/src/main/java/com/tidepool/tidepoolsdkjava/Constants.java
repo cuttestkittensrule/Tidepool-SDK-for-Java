@@ -53,7 +53,7 @@ public class Constants {
 		DEVICE_STATUS("deviceStatus"),
 		/**@since alpha-0.2.0 */
 		DOSING_DESCISION("dosingDescision"),
-		/**@sicne alpha-0.2.0 */
+		/**@since alpha-0.2.0 */
 		FOOD("food"),
 		/**@since alpha-0.2.0 */
 		INSULIN("insulin"),
