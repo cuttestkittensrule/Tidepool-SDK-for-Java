@@ -9,6 +9,8 @@
 plugins {
     // Apply the java-library plugin for API and implementation separation.
     id 'java-library'
+	// Publishing
+	id 'maven-publish'
 }
 
 repositories {
@@ -38,9 +40,53 @@ tasks.named('jar') {
     }
 }
 
-java {
-	withJavadocJar()
-	withSourcesJar()
+task sourceJar(type: Jar) {
+  from sourceSets.main.allJava
+  archiveClassifier = "sources"
+}
+
+publishing {
+	publications {
+		tidepoolSdkJava(MavenPublication) {
+			groupId = "org.tidepool.tidepoolsdkjava"
+			artifactId = "TidepoolSDKJava"
+			from components.java
+			artifact sourceJar
+			pom {
+				name = "Tidepool SDK for Java"
+				description = "API to help communicate with the tidepool backend"
+				developers {
+					developer {
+						id = "mango"
+						name = "Kyle"
+						email = "mangoiscute95@gmail.com"
+					}
+				}
+				organization {
+					name = "Tidepool"
+					url = "https://tidepool.org"
+				}
+				scm {
+					connection = "git@github.com:cuttestkittensrule/Tidepool-Sdk-for-Java.git"
+					developerConnection = "git@github.com:cuttestkittensrule/Tidepool-Sdk-for-Java.git"
+					url = "https://github.com/cuttestkittensrule/Tidepool-Sdk-for-Java"
+				}
+			}
+		}
+	}
+
+	repositories {
+		maven {
+			name = "distJar"
+			url = layout.buildDirectory.dir("repo")
+		}
+	}
+}
+
+tasks.withType(GenerateModuleMetadata).configureEach {
+    // The value 'enforced-platform' is provided in the validation
+    // error message you got
+    suppressedValidationErrors.add('enforced-platform')
 }
 
 tasks.withType(JavaCompile) {
