@@ -16,7 +16,7 @@ import java.util.regex.PatternSyntaxException;
  * @deprecated This will be replaced by structures in Request's builders
  * @since alpha-0.1.0
  */
-@Deprecated(since = "alpha-0.1.0", forRemoval = true)
+@Deprecated(since = "alpha-0.2.0", forRemoval = true)
 public class PathArgs {
 	private final List<String> validArgs;
 	private Map<String, List<String>> validValues;

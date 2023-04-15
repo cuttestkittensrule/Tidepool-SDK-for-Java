@@ -16,7 +16,7 @@ import java.util.Map;
  * </pre>
  * @since alpha-0.1.0
  */
-@Deprecated(since = "alpha-0.1.0", forRemoval = true)
+@Deprecated(since = "alpha-0.2.0", forRemoval = true)
 public class Path {
 	private String path;
 
