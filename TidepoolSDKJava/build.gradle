@@ -76,13 +76,6 @@ publishing {
 			}
 		}
 	}
-
-	repositories {
-		maven {
-			name = "distJar"
-			url = layout.buildDirectory.dir("repo")
-		}
-	}
 }
 
 tasks.withType(GenerateModuleMetadata).configureEach {
