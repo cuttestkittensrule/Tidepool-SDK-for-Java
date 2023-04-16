@@ -20,7 +20,7 @@ repositories {
     mavenCentral()
 }
 
-version = "alpha-0.2.0"
+version = "alpha-1.0.0"
 
 dependencies {
     // Use JUnit test framework.
