@@ -21,18 +21,15 @@ repositories {
 }
 
 def getAppVersion = { ->
-	def output = "";
+	def output = new ByteArrayOutputStream();
 	exec {
 		commandLine 'git', 'describe', '--abbrev=0', '--tags'
-		standardOutput = new ByteArrayOutputStream();
-		ext.output {
-			output = standardOutput
-		}
+		standardOutput = output;
 	}
-	return output.replace("\n", "").replace("\r", "").trim()
+	return output.toString().replace("\n", "").replace("\r", "").trim()
 }
 
-version = getAppVersion
+version = getAppVersion()
 
 dependencies {
     // Use JUnit test framework.
