@@ -1,11 +1,6 @@
 package com.tidepool.tidepoolsdkjava;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.URL;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,7 +10,12 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -131,15 +131,10 @@ abstract public class BaseRequest implements Runnable {
 		 */
 		TRACE("TRACE"),
 		/**
-		 * https PATCH request. <br>
-		 * <strong>Probably won't work</strong> (reason in see also)
+		 * https PATCH request.
 		 * 
-		 * @see HttpsURLConnection#setRequestMethod(String)
 		 * @since alpha-0.2.0
-		 * @deprecated Since this will probably throw an exception, this should probably
-		 *             be removed
 		 */
-		@Deprecated(since = "alpha-0.2.0", forRemoval = false)
 		PATCH("PATCH");
 
 		/**
@@ -148,7 +143,7 @@ abstract public class BaseRequest implements Runnable {
 		 * 
 		 * @since alpha-0.2.0
 		 */
-		private String code;
+		private final String code;
 
 		/**
 		 * Creates a {@link RequestType}
@@ -279,6 +274,7 @@ abstract public class BaseRequest implements Runnable {
 
 	/**
 	 * Put in a custom starting condition
+	 * 
 	 * @return {@code true} if the starting condition passes
 	 */
 	protected boolean startingCondition() {
@@ -288,7 +284,8 @@ abstract public class BaseRequest implements Runnable {
 	/**
 	 * This code runs when the starting condition fails
 	 */
-	protected void onStartingConditionFail() {}
+	protected void onStartingConditionFail() {
+	}
 
 	/**
 	 * Should return the URI for a singular request
@@ -334,46 +331,24 @@ abstract public class BaseRequest implements Runnable {
 	 * Called when {@link #isSuccsess(int)} returns {@code true},
 	 * or in other words, when the response is handled as a succsess
 	 * 
-	 * @param responseCode the HTTP response code
-	 * @param in           the {@link InputStream} that the
-	 *                     {@link HttpsURLConnection} returned
+	 * @param responseCode The HTTP response code
+	 * @param in           The {@link String} response from the backend
 	 * @since alpha-0.2.0
 	 */
-	protected void handleSuccsess(int responseCode, InputStream in) {
-		try (BufferedReader stream = new BufferedReader(new InputStreamReader(in))) {
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = stream.readLine()) != null) {
-				response.append(inputLine);
-			}
-			parseResponse(inputLine);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+	protected void handleSuccsess(int responseCode, String in) {
+		parseResponse(in);
 	}
 
 	/**
 	 * Called when {@link #isSuccsess(int)} returns {@code false},
 	 * or in other words, when the response is handled as a failure
 	 * 
-	 * @param responseCode the HTTP response code
-	 * @param in           the {@link InputStream} that the
-	 *                     {@link HttpsURLConnection} returned
+	 * @param responseCode The HTTP response code
+	 * @param in           The {@link String} response from the backend
 	 * @since alpha-0.2.0
 	 */
-	protected void handleFailure(int responseCode, InputStream in) {
-		try (BufferedReader stream = new BufferedReader(new InputStreamReader(in))) {
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = stream.readLine()) != null) {
-				response.append(inputLine);
-			}
-			parseResponse(inputLine);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+	protected void handleFailure(int responseCode, String in) {
+		parseResponse(in);
 	}
 
 	/**
@@ -484,47 +459,35 @@ abstract public class BaseRequest implements Runnable {
 		String full_url = serverURL + URI + queryParams;
 
 		try {
-			// Creating the URL object
-			URL url = new URL(full_url);
+			// Creating the URI object
+			URI uri = new URI(full_url);
 
-			// Opening the connection
-			HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+			HttpRequest.Builder builder = HttpRequest.newBuilder(uri).header("Content-Type", full_url);
+			if (requiresSessionToken()) {
+				builder = builder.header("X-Tidepool-Session-Token", cnf.getAccessToken());
+			}
 
-			con.setRequestMethod(getRequestType().getCode());
-
-			// Setting if it outputs
-			con.setDoOutput(getDoOutput());
-			// If specified, adds the session token to the header
-			if (requiresSessionToken())
-				con.addRequestProperty("X-Tidepool-Session-Token", cnf.getAccessToken());
-			//
 			for (Map.Entry<String, Object> pair : headerArgs.entrySet()) {
-				con.addRequestProperty(pair.getKey(), pair.getValue().toString());
-			}
-			// Add the content type (Ie, what data is in the body)
-			con.addRequestProperty("Content-Type", getContentType());
-			if (getDoOutput()) {
-				try (OutputStream stream = con.getOutputStream()) {
-					stream.write(getPackage());
-					stream.flush();
-				}
+				builder = builder.header(pair.getKey(), pair.getValue().toString());
 			}
 
-			// Handling responses
-			int responseCode = con.getResponseCode();
+			HttpRequest request = builder.method(getRequestType().getCode(),
+					getDoOutput() ? HttpRequest.BodyPublishers.ofByteArray(getPackage())
+							: HttpRequest.BodyPublishers.noBody())
+					.build();
 
-			try (InputStream stream = con.getInputStream()) {
-				if (isSuccsess(responseCode)) {
-					handleSuccsess(responseCode, stream);
-					status = RequestStatus.Success;
-					latch.countDown();
-				} else {
-					handleFailure(responseCode, stream);
-					status = RequestStatus.Failure;
-					latch.countDown();
-				}
+			HttpResponse<String> response = HttpClient.newHttpClient().send(request,
+					HttpResponse.BodyHandlers.ofString());
+
+			if (isSuccsess(response.statusCode())) {
+				handleSuccsess(response.statusCode(), response.body());
+				status = RequestStatus.Success;
+			} else {
+				handleFailure(response.statusCode(), response.body());
+				status = RequestStatus.Failure;
 			}
-		} catch (IOException e) {
+
+		} catch (IOException | URISyntaxException | InterruptedException e) {
 			status = RequestStatus.ExceptionRaised;
 			latch.countDown();
 			throw new RuntimeException("An exception was raised during excecution", e);
