@@ -35,13 +35,13 @@ public class TidepoolBackendConfig {
 	 */
 	private String currentRefreshToken;
 	/**
-	 * How long it takes from recieving the token does it expire in
+	 * How long it takes from recieving the access for it to expire
 	 * 
 	 * @since alpha-0.0.1
 	 */
 	private int expiresIn;
 	/**
-	 * How long it takes from recieving the refresh token does it expire in
+	 * How long it takes from recieving the refresh token for it to expire
 	 * 
 	 * @since alpha-0.0.1
 	 */

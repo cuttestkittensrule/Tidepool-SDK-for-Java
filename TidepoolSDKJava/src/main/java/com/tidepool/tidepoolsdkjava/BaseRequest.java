@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -138,8 +139,7 @@ abstract public class BaseRequest implements Runnable {
 		PATCH("PATCH");
 
 		/**
-		 * The request code to be passed into
-		 * {@link HttpsURLConnection#setRequestMethod(String)}
+		 * The request code
 		 * 
 		 * @since alpha-0.2.0
 		 */
@@ -205,6 +205,7 @@ abstract public class BaseRequest implements Runnable {
 	 * The things to put into the header*
 	 * *Not including Content-Type, or the session ID,
 	 * those are automatically put in.
+	 * The objects will be automatically turned into strings
 	 * <br>
 	 * Individual to each instance
 	 * 
@@ -327,28 +328,25 @@ abstract public class BaseRequest implements Runnable {
 	 */
 	abstract protected boolean requiresSessionToken();
 
+	private Consumer<Integer> onSuccsessListeners = (l) -> {};
+	private Consumer<Integer> onFailureListeners = (l) -> {};
+
 	/**
-	 * Called when {@link #isSuccsess(int)} returns {@code true},
-	 * or in other words, when the response is handled as a succsess
-	 * 
-	 * @param responseCode The HTTP response code
-	 * @param in           The {@link String} response from the backend
-	 * @since alpha-0.2.0
+	 * Adds a {@link Consumer} that is called when the result of the request is a succsess.
+	 * The {@link Integer} passed in is the response code
+	 * @param onSuccsessListener The {@link Consumer} that is called on a succsess
 	 */
-	protected void handleSuccsess(int responseCode, String in) {
-		parseResponse(in);
+	public void addOnSuccessListener(Consumer<Integer> onSuccsessListener) {
+		onSuccsessListeners = onSuccsessListeners.andThen(onSuccsessListener);
 	}
 
 	/**
-	 * Called when {@link #isSuccsess(int)} returns {@code false},
-	 * or in other words, when the response is handled as a failure
-	 * 
-	 * @param responseCode The HTTP response code
-	 * @param in           The {@link String} response from the backend
-	 * @since alpha-0.2.0
+	 * Adds a {@link Consumer} that is called when the result of the request is a failure.
+	 * The {@link Integer} passed in is the response code
+	 * @param onSuccsessListener The {@link Consumer} that is called on a falure
 	 */
-	protected void handleFailure(int responseCode, String in) {
-		parseResponse(in);
+	public void addOnFailureListener(Consumer<Integer> onFailureListener) {
+		onFailureListeners = onFailureListeners.andThen(onFailureListener);
 	}
 
 	/**
@@ -416,8 +414,8 @@ abstract public class BaseRequest implements Runnable {
 	}
 
 	/**
-	 * Returns the {@link JSONArray} from the response
-	 * note: Override to make public if the response is a {@link JSONArray}
+	 * Returns the {@link JSONArray} from the response.
+	 * Note: Override to make public if the response is a {@link JSONArray}
 	 * 
 	 * @return the {@link JSONArray} from the response
 	 * @since alpha-0.2.0
@@ -427,7 +425,7 @@ abstract public class BaseRequest implements Runnable {
 	}
 
 	/**
-	 * Returns the {@link JSONObject} from the response
+	 * Returns the {@link JSONObject} from the response.
 	 * Note: Override to make public if the response is a {@link JSONObject}
 	 * 
 	 * @return the {@link JSONObject} from the response
@@ -444,14 +442,16 @@ abstract public class BaseRequest implements Runnable {
 	 */
 	@Override
 	public void run() {
+		latch = new CountDownLatch(1);
+		// Getting the request status set up
+		status = RequestStatus.InProgress;
 		if (!startingCondition()) {
-			status = RequestStatus.Failure;
+			status = RequestStatus.StartingConditionFailed;
 			onStartingConditionFail();
+			latch.countDown();
 			return;
 		}
-		// Getting the request status set up
-		status = RequestStatus.StartingConditionFailed;
-		latch = new CountDownLatch(1);
+		
 		// Getting the url set up;
 		String serverURL = getEnvMap().get(cnf.getEnvironment());
 		String URI = getURI();
@@ -462,7 +462,7 @@ abstract public class BaseRequest implements Runnable {
 			// Creating the URI object
 			URI uri = new URI(full_url);
 
-			HttpRequest.Builder builder = HttpRequest.newBuilder(uri).header("Content-Type", full_url);
+			HttpRequest.Builder builder = HttpRequest.newBuilder(uri).header("Content-Type", getContentType());
 			if (requiresSessionToken()) {
 				builder = builder.header("X-Tidepool-Session-Token", cnf.getAccessToken());
 			}
@@ -479,15 +479,15 @@ abstract public class BaseRequest implements Runnable {
 			HttpResponse<String> response = HttpClient.newHttpClient().send(request,
 					HttpResponse.BodyHandlers.ofString());
 
+			parseResponse(response.body());
 			if (isSuccsess(response.statusCode())) {
-				handleSuccsess(response.statusCode(), response.body());
 				status = RequestStatus.Success;
-				latch.countDown();
+				onSuccsessListeners.accept(response.statusCode());
 			} else {
-				handleFailure(response.statusCode(), response.body());
-				status = RequestStatus.Failure;
-				latch.countDown();
+				status = RequestStatus.Failure;	
+				onFailureListeners.accept(response.statusCode());
 			}
+			latch.countDown();
 
 		} catch (IOException | URISyntaxException | InterruptedException e) {
 			status = RequestStatus.ExceptionRaised;

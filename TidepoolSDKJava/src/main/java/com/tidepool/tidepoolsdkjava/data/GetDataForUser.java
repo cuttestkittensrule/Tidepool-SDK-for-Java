@@ -14,7 +14,6 @@ import com.tidepool.tidepoolsdkjava.Constants;
 import com.tidepool.tidepoolsdkjava.config.TidepoolBackendConfig;
 
 /**
- * Currently being reworked.
  * A request that queries the backend for data.
  * 
  * @see <a href=
