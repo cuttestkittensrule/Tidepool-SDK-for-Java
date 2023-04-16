@@ -87,7 +87,7 @@ tasks.withType(GenerateModuleMetadata).configureEach {
 tasks.withType(JavaCompile) {
 	options.release = 11
 }
-ext.isReleaseVersion = false
+
 signing {
     useGpgCmd()
     sign publishing.publications.tidepoolSdkJava
