@@ -11,6 +11,8 @@ plugins {
     id 'java-library'
 	// Publishing
 	id 'maven-publish'
+	// Signing (yay)
+	id 'signing'
 }
 
 repositories {
@@ -91,4 +93,9 @@ tasks.withType(GenerateModuleMetadata).configureEach {
 
 tasks.withType(JavaCompile) {
 	options.release = 11
+}
+ext.isReleaseVersion = false
+signing {
+    useGpgCmd()
+    sign publishing.publications.tidepoolSdkJava
 }

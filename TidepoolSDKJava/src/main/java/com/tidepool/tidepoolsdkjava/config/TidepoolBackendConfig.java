@@ -10,13 +10,6 @@ import org.json.JSONObject;
  */
 public class TidepoolBackendConfig {
 	/**
-	 * The address of the associated server
-	 * 
-	 * @deprecated Use {@link Environment#getServerAddress()} instead
-	 */
-	@Deprecated(since = "alpha-0.2.0", forRemoval = true)
-	private final String serverAddress;
-	/**
 	 * The client id of this application
 	 * 
 	 * @since alpha-0.0.1
@@ -63,23 +56,6 @@ public class TidepoolBackendConfig {
 
 	/**
 	 * Creates a configuration to access the tidepool backend.
-	 * <strong>May not work properly if you put your own server address</strong>
-	 * 
-	 * @param env           The {@link Environment} that you are interfacing with
-	 * @param client_id     The starting {@code client_id}
-	 * @param serverAddress The address of the server that you are interfacing with
-	 * @since alpha-0.0.1
-	 * @deprecated Custom serverAddress not used in code anyways.
-	 */
-	@Deprecated(since = "alpha-0.2.0", forRemoval = true)
-	public TidepoolBackendConfig(Environment env, String client_id, String serverAddress) {
-		this.env = env;
-		this.serverAddress = serverAddress;
-		this.client_id = client_id;
-	}
-
-	/**
-	 * Creates a configuration to access the tidepool backend.
 	 * 
 	 * @param env       The {@link Environment} that you are interfacing with
 	 * @param client_id The starting {@code client_id}
@@ -87,7 +63,6 @@ public class TidepoolBackendConfig {
 	 */
 	public TidepoolBackendConfig(Environment env, String client_id) {
 		this.env = env;
-		this.serverAddress = null;
 		this.client_id = client_id;
 	}
 
@@ -109,17 +84,6 @@ public class TidepoolBackendConfig {
 	 */
 	String getRefreshToken() {
 		return currentRefreshToken;
-	}
-
-	/**
-	 * @deprecated Use {@link Environment#getServerAddress()} instead
-	 *             Gets the set server address
-	 * @return the set server address
-	 * @since alpha-0.0.1
-	 */
-	@Deprecated(since = "alpha-0.2.0", forRemoval = true)
-	public String getServerAddress() {
-		return serverAddress;
 	}
 
 	/**
