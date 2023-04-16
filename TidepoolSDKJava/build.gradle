@@ -20,7 +20,19 @@ repositories {
     mavenCentral()
 }
 
-version = "alpha-1.0.1"
+def getAppVersion = { ->
+	def output = "";
+	exec {
+		commandLine 'git', 'describe', '--abbrev=0', '--tags'
+		standardOutput = new ByteArrayOutputStream();
+		ext.output {
+			output = standardOutput
+		}
+	}
+	return output.replace("\n", "").replace("\r", "").trim()
+}
+
+version = getAppVersion
 
 dependencies {
     // Use JUnit test framework.
