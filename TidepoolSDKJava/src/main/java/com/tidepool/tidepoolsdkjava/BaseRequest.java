@@ -482,9 +482,11 @@ abstract public class BaseRequest implements Runnable {
 			if (isSuccsess(response.statusCode())) {
 				handleSuccsess(response.statusCode(), response.body());
 				status = RequestStatus.Success;
+				latch.countDown();
 			} else {
 				handleFailure(response.statusCode(), response.body());
 				status = RequestStatus.Failure;
+				latch.countDown();
 			}
 
 		} catch (IOException | URISyntaxException | InterruptedException e) {
