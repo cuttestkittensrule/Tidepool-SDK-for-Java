@@ -17,7 +17,7 @@ public final class UpdateAccessToken extends UrlEncodedRequest {
 	/**
 	 * Used to create an UpdateAccessToken request
 	 * 
-	 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token">Spotlight docs</a>
+	 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token">stoplight docs</a>
 	 * @since alpha-0.2.0
 	 */
 	public static class Builder {
@@ -38,7 +38,7 @@ public final class UpdateAccessToken extends UrlEncodedRequest {
 		 * Creates a Builder for {@link UpdateAccessToken}
 		 * @param grantType The grant type
 		 * @param cnf The backend configuration
-		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token">Spotlight docs</a>
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token">stoplight docs</a>
 		 * @since alpha-0.2.0
 		 */
 		public Builder(String grantType, TidepoolBackendConfig cnf) {
@@ -59,7 +59,7 @@ public final class UpdateAccessToken extends UrlEncodedRequest {
 		 * @param code The code
 		 * @return {@code this} for chaining
 		 * @since alpha-0.2.0
-		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">stoplight docs</a>
 		 */
 		public Builder setCode(String code) {
 			bodyParams.put("code", code);
@@ -71,7 +71,7 @@ public final class UpdateAccessToken extends UrlEncodedRequest {
 		 * @param codeverifier The code verifier
 		 * @return {@code this} for chaining
 		 * @since alpha-0.2.0
-		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">stoplight docs</a>
 		 */
 		public Builder setCodeVerifier(String codeverifier) {
 			bodyParams.put("code_verifier", codeverifier);
@@ -83,7 +83,7 @@ public final class UpdateAccessToken extends UrlEncodedRequest {
 		 * @param secret The client secret
 		 * @return {@code this} for chaining
 		 * @since alpha-0.2.0
-		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">stoplight docs</a>
 		 */
 		public Builder setClientSecret(String secret) {
 			bodyParams.put("client_secret", secret);
@@ -95,7 +95,7 @@ public final class UpdateAccessToken extends UrlEncodedRequest {
 		 * @param subjectToken The subject token
 		 * @return {@code this} for chaining
 		 * @since alpha-0.2.0
-		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">stoplight docs</a>
 		 */
 		public Builder setSubjectToken(String subjectToken) {
 			bodyParams.put("subject_token", subjectToken);
@@ -107,7 +107,7 @@ public final class UpdateAccessToken extends UrlEncodedRequest {
 		 * @param subjectTokenType the subject token type
 		 * @return {@code this} for chaining
 		 * @since alpha-0.2.0
-		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">stoplight docs</a>
 		 */
 		public Builder setSubjectTokenType(String subjectTokenType) {
 			if (subjectTokenType != "urn:ietf:params:oauth:token-type:access_token"
@@ -125,7 +125,7 @@ public final class UpdateAccessToken extends UrlEncodedRequest {
 		 * @param requestedTokenType The requested token type
 		 * @return {@code this} for chaining
 		 * @since alpha-0.2.0
-		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">stoplight docs</a>
 		 */
 		public Builder setRequestedTokenType(String requestedTokenType) {
 			if (requestedTokenType != "urn:ietf:params:oauth:token-type:access_token"
@@ -143,7 +143,7 @@ public final class UpdateAccessToken extends UrlEncodedRequest {
 		 * @param subjectIssuer The subject issuer
 		 * @return {@code this} for chaining
 		 * @since alpha-0.2.0
-		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">stoplight docs</a>
 		 */
 		public Builder setSubjectIssuer(String subjectIssuer) {
 			bodyParams.put("subject_issuer", subjectIssuer);
@@ -154,7 +154,7 @@ public final class UpdateAccessToken extends UrlEncodedRequest {
 		 * Puts the current refresh token into the parameters
 		 * @return {@code this} for chaining
 		 * @since alpha-0.2.0
-		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">stoplight docs</a>
 		 */
 		public Builder putRefreshToken() {
 			bodyParams.put("refresh_token", cnf.getRefreshToken());
@@ -228,7 +228,7 @@ public final class UpdateAccessToken extends UrlEncodedRequest {
 
 	/**
 	 * @since alpha-0.2.0
-	 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">Spotlight docs</a>
+	 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token#request-body">stoplight docs</a>
 	 */
 	@Override
 	public JSONObject getJsonObject() {

@@ -17,7 +17,7 @@ import com.tidepool.tidepoolsdkjava.config.TidepoolBackendConfig;
  * A request that queries the backend for data.
  * 
  * @see <a href=
- *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user">Spotlight
+ *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user">stoplight
  *      Docs</a>
  * @see BaseRequest
  * @since alpha-0.2.0
@@ -27,7 +27,7 @@ public class GetDataForUser extends BodylessRequest {
 	 * Used to create a {@link GetDataForUser} request
 	 * 
 	 * @see <a href=
-	 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Request">spotlight
+	 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Request">stoplight
 	 *      docs</a>
 	 */
 	public static class Builder {
@@ -57,7 +57,7 @@ public class GetDataForUser extends BodylessRequest {
 		 * @param userId The user id
 		 * @since alpha-0.2.0
 		 * @see <a href=
-		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">spotlight
+		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">stoplight
 		 *      docs</a>
 		 */
 		public Builder(TidepoolBackendConfig cnf, String userId) {
@@ -73,7 +73,7 @@ public class GetDataForUser extends BodylessRequest {
 		 * @return {@code this} for chaining
 		 * @since alpha-0.2.0
 		 * @see <a href=
-		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">spotlight
+		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">stoplight
 		 *      docs</a>
 		 */
 		public Builder setDeviceId(String deviceId) {
@@ -88,7 +88,7 @@ public class GetDataForUser extends BodylessRequest {
 		 * @return {@code this} for chaining
 		 * @since alpha-0.2.0
 		 * @see <a href=
-		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">spotlight
+		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">stoplight
 		 *      docs</a>
 		 */
 		public Builder setEndDate(ZonedDateTime endDate) {
@@ -103,7 +103,7 @@ public class GetDataForUser extends BodylessRequest {
 		 * @return {@code this} for chaining
 		 * @since alpha-0.2.0
 		 * @see <a href=
-		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">spotlight
+		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">stoplight
 		 *      docs</a>
 		 */
 		public Builder setLatest(boolean latest) {
@@ -118,7 +118,7 @@ public class GetDataForUser extends BodylessRequest {
 		 * @return {@code this} for chaining
 		 * @since alpha-0.2.0
 		 * @see <a href=
-		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">spotlight
+		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">stoplight
 		 *      docs</a>
 		 */
 		public Builder setStartDate(ZonedDateTime startDate) {
@@ -134,7 +134,7 @@ public class GetDataForUser extends BodylessRequest {
 		 * @return {@code this} for chaining
 		 * @since alpha-0.2.0
 		 * @see <a href=
-		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">spotlight
+		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">stoplight
 		 *      docs</a>
 		 */
 		public Builder setTypes(Constants.uploadType... types) {
@@ -148,7 +148,7 @@ public class GetDataForUser extends BodylessRequest {
 		 * @return {@code this} for chaining
 		 * @since alpha-0.2.0
 		 * @see <a href=
-		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">spotlight
+		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">stoplight
 		 *      docs</a>
 		 */
 		public Builder setUploadId(String uploadId) {
@@ -162,7 +162,7 @@ public class GetDataForUser extends BodylessRequest {
 		 * @return {@code this} for chaining
 		 * @since alpha-0.2.0
 		 * @see <a href=
-		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">spotlight
+		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">stoplight
 		 *      docs</a>
 		 */
 		public Builder setCarelink(boolean carelink) {
@@ -175,7 +175,7 @@ public class GetDataForUser extends BodylessRequest {
 		 * @return {@code this} for chaining
 		 * @since alpha-0.2.0
 		 * @see <a href=
-		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">spotlight
+		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">stoplight
 		 *      docs</a>
 		 */
 		public Builder setDexcom(boolean dexcom) {
@@ -188,7 +188,7 @@ public class GetDataForUser extends BodylessRequest {
 		 * @return {@code this} for chaining
 		 * @since alpha-0.2.0
 		 * @see <a href=
-		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">spotlight
+		 *      "https://tidepool.stoplight.io/docs/tidepool-full-api/e8fd4582725ef-get-data-for-user#Query-Parameters">stoplight
 		 *      docs</a>
 		 */
 		public Builder setMedtronic(boolean medtronic) {
