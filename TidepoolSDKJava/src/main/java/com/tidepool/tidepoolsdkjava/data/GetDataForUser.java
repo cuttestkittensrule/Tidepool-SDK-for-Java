@@ -210,6 +210,10 @@ public class GetDataForUser extends BodylessRequest {
 			}
 			queryArgs.put(key, args);
 		}
+
+		public GetDataForUser build() {
+			return new GetDataForUser(this);
+		}
 	}
 
 	/**

@@ -27,7 +27,7 @@ public abstract class BodylessRequest extends BaseRequest {
 	 * @since alpha-0.2.0
 	 */
 	@Override
-	protected final boolean getDoOutput() {
+	protected final boolean doesOutput() {
 		return false;
 	}
 

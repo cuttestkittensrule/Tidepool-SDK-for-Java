@@ -310,7 +310,7 @@ abstract public class BaseRequest implements Runnable {
 	 * @return if this type of request does output
 	 * @since alpha-0.2.0
 	 */
-	abstract protected boolean getDoOutput();
+	abstract protected boolean doesOutput();
 
 	/**
 	 * Should return the Content Type of the body for a type of request
@@ -472,7 +472,7 @@ abstract public class BaseRequest implements Runnable {
 			}
 
 			HttpRequest request = builder.method(getRequestType().getCode(),
-					getDoOutput() ? HttpRequest.BodyPublishers.ofByteArray(getPackage())
+					doesOutput() ? HttpRequest.BodyPublishers.ofByteArray(getPackage())
 							: HttpRequest.BodyPublishers.noBody())
 					.build();
 
