@@ -73,6 +73,9 @@ public class TidepoolBackendConfig {
 	 * @since alpha-0.0.1
 	 */
 	public String getAccessToken() {
+		if (tokenRefreshRequired()) {
+			UpdateAcessToken();
+		}
 		return currentAccessToken;
 	}
 
