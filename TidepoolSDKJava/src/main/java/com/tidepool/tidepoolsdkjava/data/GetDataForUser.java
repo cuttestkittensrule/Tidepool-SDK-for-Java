@@ -273,4 +273,12 @@ public class GetDataForUser extends BodylessRequest {
 	public JSONArray getJsonArray() {
 		return super.getJsonArray();
 	}
+
+	/**
+	 * @since alpha-2.1.0
+	 */
+	@Override
+	protected String accept() {
+		return "application/json";
+	}
 }

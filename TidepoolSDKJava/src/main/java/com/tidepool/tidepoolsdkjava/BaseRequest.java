@@ -318,7 +318,15 @@ abstract public class BaseRequest implements Runnable {
 	 * @return The string representation of the content type.
 	 * @since alpha-0.2.0
 	 */
-	abstract protected String getContentType();
+	abstract protected String contentType();
+	/**
+	 * Should return the "accept" value of a specific request,
+	 * or null if there is none
+	 * 
+	 * @return The string representation of the accept value
+	 * @since alpha-2.1.0
+	 */
+	abstract protected String accept();
 
 	/**
 	 * Should return if a request requires the session token in the header
@@ -421,6 +429,9 @@ abstract public class BaseRequest implements Runnable {
 	 * @since alpha-0.2.0
 	 */
 	protected JSONArray getJsonArray() {
+		if (jsonObject == null) {
+			throw new IllegalStateException("jsonObject has not yet been set");
+		}
 		return jsonArray;
 	}
 
@@ -432,6 +443,9 @@ abstract public class BaseRequest implements Runnable {
 	 * @since alpha-0.2.0
 	 */
 	protected JSONObject getJsonObject() {
+		if (jsonObject == null) {
+			throw new IllegalStateException("jsonObject has not yet been set");
+		}
 		return jsonObject;
 	}
 
@@ -462,7 +476,14 @@ abstract public class BaseRequest implements Runnable {
 			// Creating the URI object
 			URI uri = new URI(full_url);
 
-			HttpRequest.Builder builder = HttpRequest.newBuilder(uri).header("Content-Type", getContentType());
+			HttpRequest.Builder builder = HttpRequest.newBuilder(uri).header("Content-Type", contentType());
+			if (contentType() != null) {
+				builder = builder.header("Content-Type", contentType());
+			}
+			if (accept() != null) {
+				builder = builder.header("Accept", accept());
+			}
+			
 			if (requiresSessionToken()) {
 				builder = builder.header("X-Tidepool-Session-Token", cnf.getAccessToken());
 			}

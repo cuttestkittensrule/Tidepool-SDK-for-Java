@@ -237,10 +237,19 @@ public final class UpdateAccessToken extends UrlEncodedRequest {
 
 	/**
 	 * Returns {@code true} if the refresh token hasn't expired
+	 * @since alpha-1.0.0
 	 */
 	@Override
 	protected boolean startingCondition() {
 		return !cnf.refreshTokenExpired();
+	}
+
+	/**
+	 * @since alpha-2.1.0
+	 */
+	@Override
+	protected String accept() {
+		return "application/json";
 	}
 
 }

@@ -44,7 +44,7 @@ public abstract class UrlEncodedRequest extends BaseRequest {
 	 * @since alpha-0.2.0
 	 */
 	@Override
-	protected final String getContentType() {
+	protected final String contentType() {
 		return "application/x-www-form-urlencoded";
 	}
 
