@@ -2,6 +2,7 @@ package com.tidepool.tidepoolsdkjava.data;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -126,6 +127,27 @@ public class GetDataForUser extends BodylessRequest {
 			return this;
 		}
 
+		/**
+		 * Adds what sub-types to get data for
+		 * @param linked if you want data that has the sub-type "linked"
+		 * @param manual if you want data that has the sub-type "manual"
+		 * @param scanned if you want data that has the sub-type "scanned"
+		 * @return {@code this} for chaining
+		 */
+		public Builder setSubTypes(boolean linked, boolean manual, boolean scanned) {
+			List<Object> vals = new ArrayList<>();
+			if (linked) {
+				vals.add("linked");
+			}
+			if (manual) {
+				vals.add("manual");
+			}
+			if (scanned) {
+				vals.add("scanned");
+			}
+			put("subType", vals);
+			return this;
+		}
 		//TODO: add subType (requires additional research)
 
 		/**
@@ -204,11 +226,18 @@ public class GetDataForUser extends BodylessRequest {
 		 * @since alpha-0.2.0
 		 */
 		private void put(String key, Object... values) {
-			List<Object> args = new ArrayList<>();
-			for (Object arg : values) {
-				args.add(arg);
-			}
-			queryArgs.put(key, args);
+			put(key, Arrays.asList(values));
+		}
+
+		/**
+		 * Puts a key and some set values into the parameters
+		 * 
+		 * @param key    The key
+		 * @param values The value(s)
+		 * @since alpha-0.2.0
+		 */
+		private void put(String key, List<Object> values) {
+			queryArgs.put(key, values);
 		}
 
 		public GetDataForUser build() {

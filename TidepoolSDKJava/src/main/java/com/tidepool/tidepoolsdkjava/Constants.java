@@ -8,51 +8,113 @@ public class Constants {
 	 * @since alpha-0.2.0
 	 */
 	public static enum uploadType {
-		// TODO: Add descriptions of what each type represents (needs person with in-depth backend knowledge)
-		/**@since alpha-0.2.0 */
+		// TODO: Add descriptions of what each type represents (needs person with backend knowledge)
+		/**
+		 * An alert that was sent
+		 * @since alpha-0.2.0
+		 */
 		ALERT("alert"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * Scheduled basal or temporary basal
+		 * @since alpha-0.2.0
+		 */
 		BASAL("basal"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * Blook Ketone levels from a blood keytone meter
+		 * @since alpha-0.2.0
+		 */
 		BLOOD_KETONE("bloodKetone"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * Boluses
+		 * @since alpha-0.2.0
+		 */
 		BOLUS("bolus"),
 		/**
-		 * aka cgm data
+		 * CGM data
 		 * @since alpha-0.2.0
 		 */
 		CBG("cbg"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * When settings related to CGMs are changed
+		 * @since alpha-0.2.0
+		 */
 		CGM_SETTINGS("cgmSettings"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * Therapy settings changed
+		 * @since alpha-0.2.0
+		 */
 		CONTROLLER_SETTINGS("controllerSettings"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * Closed loop on/off?
+		 * TODO: verify this documentation
+		 * @since alpha-0.2.0
+		 */
 		CONTROLLER_STATUS("controllerStatus"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * Whenever there is a coms connection with CGM or pump
+		 * @since alpha-0.2.0
+		 */
 		DEVICE_EVENT("deviceEvent"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * Status changes of a device
+		 * @since alpha-0.2.0
+		 */
 		DEVICE_STATUS("deviceStatus"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * Dosing descisions made by Loop
+		 * @since alpha-0.2.0
+		 */
 		DOSING_DESCISION("dosingDescision"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * Generally carbs
+		 * TODO: more food types?
+		 * @since alpha-0.2.0
+		 */
 		FOOD("food"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * Insulin deliveries
+		 * @since alpha-0.2.0
+		 */
 		INSULIN("insulin"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * Workout information imported from apple health via Tidepool Mobile
+		 * @since alpha-0.2.0
+		 */
 		PHYSICAL_ACTIVITY("physicalActivity"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * Pump-specific settings changed
+		 * @since alpha-0.2.0
+		 */
 		PUMP_SETTINGS("pumpSettings"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * Status of a pump
+		 * @since alpha-0.2.0
+		 */
 		PUMP_STATUS("pumpStatus"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * TODO: documentation needed (don't know what this is)
+		 * @since alpha-0.2.0
+		 */
 		REPORTED_STATE("reportedState"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * Glucose readings from a BGM
+		 * @since alpha-0.2.0
+		 */
 		SMBG("smbg"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * TODO: documentation needed (don't know what this is)
+		 * @since alpha-0.2.0
+		 */
 		UPLOAD("upload"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * TODO: documentation needed (don't know what this is)
+		 * @since alpha-0.2.0
+		 */
 		WATER("water"),
-		/**@since alpha-0.2.0 */
+		/**
+		 * Data from a traditional pump bolus wizzard
+		 * @since alpha-0.2.0
+		 */
 		WIZARD("wizard");
 		/**
 		 * The string value that represents the uploadType in the backend
