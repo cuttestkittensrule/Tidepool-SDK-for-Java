@@ -1,6 +1,11 @@
 package com.tidepool.tidepoolsdkjava;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,12 +16,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import javax.net.ssl.HttpsURLConnection;
-
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -274,15 +273,6 @@ abstract public class BaseRequest implements Runnable {
 	}
 
 	/**
-	 * Put in a custom starting condition
-	 * 
-	 * @return {@code true} if the starting condition passes
-	 */
-	protected boolean startingCondition() {
-		return true;
-	}
-
-	/**
 	 * This code runs when the starting condition fails
 	 */
 	protected void onStartingConditionFail() {
@@ -459,12 +449,6 @@ abstract public class BaseRequest implements Runnable {
 		latch = new CountDownLatch(1);
 		// Getting the request status set up
 		status = RequestStatus.InProgress;
-		if (!startingCondition()) {
-			status = RequestStatus.StartingConditionFailed;
-			onStartingConditionFail();
-			latch.countDown();
-			return;
-		}
 		
 		// Getting the url set up;
 		String serverURL = getEnvMap().get(cnf.getEnvironment());

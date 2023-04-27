@@ -1,5 +1,7 @@
 package com.tidepool.tidepoolsdkjava.config;
 
+import java.util.function.Consumer;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -74,7 +76,7 @@ public class TidepoolBackendConfig {
 	 */
 	public String getAccessToken() {
 		if (tokenRefreshRequired()) {
-			UpdateAcessToken();
+			updateAcessToken();
 		}
 		return currentAccessToken;
 	}
@@ -146,7 +148,7 @@ public class TidepoolBackendConfig {
 	 * @param json the reply to the https POST request
 	 * @since alpha-0.0.1
 	 */
-	void UpdateAcessToken(JSONObject json) {
+	void updateAcessToken(JSONObject json) {
 		try {
 			currentAccessToken = json.getString("acess_token");
 			expiresIn = json.getInt("expires_in");
@@ -163,7 +165,15 @@ public class TidepoolBackendConfig {
 	 * 
 	 * @since alpha-0.0.1
 	 */
-	public void UpdateAcessToken() {
-		new UpdateAccessToken.Builder("refresh_token", this).build().run();
+	public void updateAcessToken() {
+		UpdateAccessToken request = new UpdateAccessToken(this);
+		Consumer<Integer> update = (code) -> updateAcessToken(request.getJsonObject());
+		request.addOnSuccessListener(update);
+		request.run();
+		try {
+			request.awaitCompletion();
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

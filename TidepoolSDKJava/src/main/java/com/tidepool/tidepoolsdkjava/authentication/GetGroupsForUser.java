@@ -9,6 +9,10 @@ import org.json.JSONObject;
 import com.tidepool.tidepoolsdkjava.BodylessRequest;
 import com.tidepool.tidepoolsdkjava.config.TidepoolBackendConfig;
 
+
+/*
+	TODO: If and/or when the current (4/25/2023) Authentication category is deprecated, and removed from the docs, replace with new name
+*/
 /**
  * A Request that gets all users that a user with the given {@code userId} can
  * see.

@@ -224,12 +224,12 @@ public class GetDataForUser extends BodylessRequest {
 	private final String userId;
 
 	/**
-	 * Private constructor that uses builder
+	 * protected constructor that uses builder
 	 * 
 	 * @param builder The builder
 	 * @since alpha-0.2.0
 	 */
-	private GetDataForUser(Builder builder) {
+	protected GetDataForUser(Builder builder) {
 		super(new HashMap<>(), builder.cnf, builder.queryArgs);
 		userId = builder.userId;
 	}
