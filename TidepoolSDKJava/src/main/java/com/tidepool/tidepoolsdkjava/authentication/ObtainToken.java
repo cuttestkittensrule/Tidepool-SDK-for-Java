@@ -3,6 +3,7 @@ package com.tidepool.tidepoolsdkjava.authentication;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.json.JSONObject;
 
@@ -40,7 +41,7 @@ public class ObtainToken extends UrlEncodedRequest {
 		private Map<String, String> bodyParams;
 
 		/**
-		 * Creates a Builder for {@link UpdateAccessToken}
+		 * Creates a Builder for {@link ObtainToken}
 		 * @param grantType The grant type
 		 * @param cnf The backend configuration
 		 * @see <a href="https://tidepool.stoplight.io/docs/tidepool-full-api/094dd3fd48c42-obtain-token">stoplight docs</a>
@@ -167,8 +168,8 @@ public class ObtainToken extends UrlEncodedRequest {
 		}
 
 		/**
-		 * Builds this into an {@link UpdateAccessToken} request
-		 * @return an {@link UpdateAccessToken} request
+		 * Builds this into an {@link ObtainToken} request
+		 * @return an {@link ObtainToken} request
 		 * @since alpha-3.0.0
 		 */
 		public ObtainToken build() {
@@ -177,7 +178,7 @@ public class ObtainToken extends UrlEncodedRequest {
 	}
 
 	/**
-	 * Creates an {@link UpdateAccessToken} request
+	 * Creates an {@link ObtainToken} request
 	 * @param builder the builder to create this with
 	 * @since alpha-3.0.0
 	 */

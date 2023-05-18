@@ -341,7 +341,7 @@ abstract public class BaseRequest implements Runnable {
 	/**
 	 * Adds a {@link Consumer} that is called when the result of the request is a failure.
 	 * The {@link Integer} passed in is the response code
-	 * @param onSuccsessListener The {@link Consumer} that is called on a falure
+	 * @param onFailureListener The {@link Consumer} that is called on a falure
 	 */
 	public void addOnFailureListener(Consumer<Integer> onFailureListener) {
 		onFailureListeners = onFailureListeners.andThen(onFailureListener);
