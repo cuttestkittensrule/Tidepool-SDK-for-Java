@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -240,7 +241,9 @@ abstract public class BaseRequest implements Runnable {
 	 * this should contain the result
 	 * 
 	 * @since alpha-0.2.0
+	 * @deprecated should be a JsonRequest thing
 	 */
+	@Deprecated(forRemoval = true)
 	protected JSONObject jsonObject;
 
 	/**
@@ -248,7 +251,9 @@ abstract public class BaseRequest implements Runnable {
 	 * this should contain the result
 	 * 
 	 * @since alpha-0.2.0
+	 * @deprecated should be a JSONRequest thing
 	 */
+	@Deprecated(forRemoval = true)
 	protected JSONArray jsonArray;
 
 	/**
@@ -326,15 +331,15 @@ abstract public class BaseRequest implements Runnable {
 	 */
 	abstract protected boolean requiresSessionToken();
 
-	private Consumer<Integer> onSuccsessListeners = (l) -> {};
-	private Consumer<Integer> onFailureListeners = (l) -> {};
+	private IntConsumer onSuccsessListeners = (l) -> {};
+	private IntConsumer onFailureListeners = (l) -> {};
 
 	/**
 	 * Adds a {@link Consumer} that is called when the result of the request is a succsess.
 	 * The {@link Integer} passed in is the response code
 	 * @param onSuccsessListener The {@link Consumer} that is called on a succsess
 	 */
-	public void addOnSuccessListener(Consumer<Integer> onSuccsessListener) {
+	public void addOnSuccessListener(IntConsumer onSuccsessListener) {
 		onSuccsessListeners = onSuccsessListeners.andThen(onSuccsessListener);
 	}
 
@@ -343,7 +348,7 @@ abstract public class BaseRequest implements Runnable {
 	 * The {@link Integer} passed in is the response code
 	 * @param onFailureListener The {@link Consumer} that is called on a falure
 	 */
-	public void addOnFailureListener(Consumer<Integer> onFailureListener) {
+	public void addOnFailureListener(IntConsumer onFailureListener) {
 		onFailureListeners = onFailureListeners.andThen(onFailureListener);
 	}
 
@@ -403,7 +408,9 @@ abstract public class BaseRequest implements Runnable {
 	 * @return {@code true} if the request finished or {@code false} if the timeout
 	 *         duration elapsed before the request finished
 	 * @since alpha-0.2.0
+	 * @deprecated May be unessecary
 	 */
+	@Deprecated
 	public final boolean awaitCompletion(Duration waitTime) throws InterruptedException {
 		if (latch == null) {
 			throw new IllegalStateException("The Request hasn't been started");
@@ -417,7 +424,9 @@ abstract public class BaseRequest implements Runnable {
 	 * 
 	 * @return the {@link JSONArray} from the response
 	 * @since alpha-0.2.0
+	 * @deprecated Should not need to be defined here
 	 */
+	@Deprecated(forRemoval = true)
 	protected JSONArray getJsonArray() {
 		if (jsonObject == null) {
 			throw new IllegalStateException("jsonObject has not yet been set");
@@ -431,7 +440,9 @@ abstract public class BaseRequest implements Runnable {
 	 * 
 	 * @return the {@link JSONObject} from the response
 	 * @since alpha-0.2.0
+	 * @deprecated Should not need to be defined here
 	 */
+	@Deprecated
 	protected JSONObject getJsonObject() {
 		if (jsonObject == null) {
 			throw new IllegalStateException("jsonObject has not yet been set");
@@ -531,6 +542,7 @@ abstract public class BaseRequest implements Runnable {
 			result = result.substring(0, result.length() - 1);
 			result += "&";
 		}
+		// remove final element in string
 		return result.substring(0, result.length() - 1);
 	}
 }

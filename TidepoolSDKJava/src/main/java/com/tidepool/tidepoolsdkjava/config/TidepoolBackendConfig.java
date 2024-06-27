@@ -1,6 +1,8 @@
 package com.tidepool.tidepoolsdkjava.config;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,6 +13,7 @@ import org.json.JSONObject;
  * @since alpha-0.0.1
  */
 public class TidepoolBackendConfig {
+	private CountDownLatch tokenLatch = new CountDownLatch(1);
 	/**
 	 * The client id of this application
 	 * 
@@ -77,6 +80,12 @@ public class TidepoolBackendConfig {
 	public String getAccessToken() {
 		if (tokenRefreshRequired()) {
 			updateAcessToken();
+			try {
+				tokenLatch.await();
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+			
 		}
 		return currentAccessToken;
 	}
@@ -165,15 +174,16 @@ public class TidepoolBackendConfig {
 	 * 
 	 * @since alpha-0.0.1
 	 */
-	public void updateAcessToken() {
-		UpdateAccessToken request = new UpdateAccessToken(this);
-		Consumer<Integer> update = (code) -> updateAcessToken(request.getJsonObject());
-		request.addOnSuccessListener(update);
-		request.run();
-		try {
-			request.awaitCompletion();
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
+	public synchronized void updateAcessToken() {
+		if (tokenLatch.getCount() == 0) {
+			tokenLatch = new CountDownLatch(1);
+			UpdateAccessToken request = new UpdateAccessToken(this);
+			IntConsumer update = (code) -> {
+				updateAcessToken(request.getJsonObject());
+				tokenLatch.countDown();
+			};
+			request.addOnSuccessListener(update);
+			request.run();
 		}
 	}
 }

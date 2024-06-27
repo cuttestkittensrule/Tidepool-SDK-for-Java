@@ -118,7 +118,7 @@ public class ObtainToken extends UrlEncodedRequest {
 			if (subjectTokenType != "urn:ietf:params:oauth:token-type:access_token"
 					&& subjectTokenType != "urn:ietf:params:oauth:token-type:jwt") {
 				throw new IllegalArgumentException(
-						"Expected \"urn:ietf:params:oauth:token-type:access_token\" or \"urn:ietf:params:oauth:token-type:access_token\", but was: \""
+						"Expected \"urn:ietf:params:oauth:token-type:access_token\" or \"urn:ietf:params:oauth:token-type:jwt\", but was: \""
 								+ subjectTokenType + "\"");
 			}
 			bodyParams.put("subject_token_type", subjectTokenType);
